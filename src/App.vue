@@ -1,6 +1,6 @@
 <template>
 <div  class="page-container">
-    <md-app md-waterfall md-mode="flexible">
+    <!-- <md-app md-waterfall md-mode="flexible">
       <md-app-toolbar class="md-large md-primary">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
@@ -57,33 +57,14 @@
           <md-bottom-bar-item md-label="Home" md-icon="home"></md-bottom-bar-item>
           <md-bottom-bar-item md-label="Pages" md-icon="pages"></md-bottom-bar-item>
           <md-bottom-bar-item md-label="Favorites" md-icon="favorite"></md-bottom-bar-item>
-      </md-bottom-bar>
+      </md-bottom-bar> -->
     
-
-    <!-- <header class="page-header">
-      <md-toolbar>
-      <h3 class="md-title" style="flex: 1">Title</h3>
-      <md-button class="md-icon-button">
-        <md-icon>more_vert</md-icon>
-      </md-button>
-    </md-toolbar>
-    </header>
-    <div class="page-content">
-      <P>FFFFFFFFFFF</P>
-    </div>
-    <div class="page-bottomBar">
-      <md-bottom-bar  md-type="shift" @md-changed="checkNewPosts">
-        <md-bottom-bar-item md-label="Home" md-icon="home"></md-bottom-bar-item>
-        <md-bottom-bar-item md-label="Pages" md-icon="pages"></md-bottom-bar-item>
-        <md-bottom-bar-item md-label="Favorites" md-icon="favorite"></md-bottom-bar-item>
-    </md-bottom-bar>
-    </div>-->
+    <router-view/> 
+    <md-dialog-alert
+      :md-active="Alert.show" v-on:update:mdActive="$store.commit('setAlert',{show:false})"
+      :md-content="Alert.msg"
+      :md-confirm-text="Alert.btnText" />
   </div> 
-  <!-- <div id="app">
-
-    <img src="./assets/logo.png">
-   
-  </div> -->
 </template>
 
 <script>
@@ -95,8 +76,18 @@ export default {
       menuVisible: false
     };
   },
+  methods:{
+    // aa(){
+    //   alert('aa')
+    // }
+  },
   computed: {
     ...mapState(["Header", "BottomBar", "Alert", "isLoading"])
+  },
+  mounted(){
+    console.log(this.$store)
+
+    this.$alert({show:true,msg:"aaaaa",btnText:"aaaaaadd"})
   }
 };
 </script>

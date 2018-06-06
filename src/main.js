@@ -26,6 +26,10 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', false)
 })
 
+Vue.prototype.$alert = (alert) => {
+  store.commit('setAlert', alert)
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -12,7 +12,11 @@ const State = {
     BottomBar: {
         show: true
     },
-    Alert: {},
+    Alert: {
+        show: false,
+        msg: "",
+        btnText: "OK"
+    },
     isLoading: false
 
 }
@@ -28,6 +32,9 @@ const Mutations = {
     updateHeader(state, header) {
         state.Header.show = header.show
         state.Header.back = header.back
+    },
+    setAlert(state, alert) {
+        state.Alert = alert;
     }
 
 }
