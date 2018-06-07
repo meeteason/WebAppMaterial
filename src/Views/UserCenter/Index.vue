@@ -1,13 +1,14 @@
 <template>
-<web-upload/>
+
 </template>
 <script>
+
 export default {
   components: {},
   data() { return {}; },
   mounted() {},
   watch: {},
   computed: {},
-  methods: {},
+  methods: {}
 };
 </script>

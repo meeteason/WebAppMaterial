@@ -10,10 +10,15 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'vue-material/dist/vue-material.min.css'
 import theme from './assets/sass/theme.scss'
 import './assets/css/animate.css'
+import webComponents from './components/index'
+
+import chain from './Mixins/chain'
 Vue.use(VueMaterial)
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
-
+Vue.use(webComponents)
 Vue.config.productionTip = false
+
+Vue.mixin(chain)
 
 
 //the router loading

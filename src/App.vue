@@ -86,8 +86,8 @@ export default {
   },
   mounted(){
     console.log(this.$store)
-
-    this.$alert({show:true,msg:"aaaaa",btnText:"aaaaaadd"})
+    
+    // this.$alert({show:true,msg:"aaaaa",btnText:"aaaaaadd"})
   }
 };
 </script>

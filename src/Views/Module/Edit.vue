@@ -1,5 +1,4 @@
 <template>
-<web-upload/>
 </template>
 <script>
 export default {
@@ -8,6 +7,6 @@ export default {
   mounted() {},
   watch: {},
   computed: {},
-  methods: {},
+  methods: {}
 };
 </script>
