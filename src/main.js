@@ -13,6 +13,8 @@ import './assets/css/animate.css'
 import webComponents from './components/index'
 
 import chain from './Mixins/chain'
+
+import toast from './components/toast'
 Vue.use(VueMaterial)
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
 Vue.use(webComponents)
@@ -35,6 +37,8 @@ Vue.prototype.$alert = (alert) => {
   store.commit('setAlert', alert)
 }
 
+
+Vue.prototype.$toast = toast;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

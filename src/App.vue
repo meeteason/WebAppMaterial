@@ -60,10 +60,12 @@
       </md-bottom-bar> -->
     
     <router-view/> 
-    <md-dialog-alert
+    <!-- <md-dialog-alert
       :md-active="Alert.show" v-on:update:mdActive="$store.commit('setAlert',{show:false})"
       :md-content="Alert.msg"
       :md-confirm-text="Alert.btnText" />
+
+      <web-toast /> -->
   </div> 
 </template>
 
@@ -86,7 +88,7 @@ export default {
   },
   mounted(){
     console.log(this.$store)
-    
+
     // this.$alert({show:true,msg:"aaaaa",btnText:"aaaaaadd"})
   }
 };
