@@ -5,6 +5,7 @@ import Index from '@/Views/Index'
 import SignIn from '@/Views/SignIn'
 import SignUp from '@/Views/SignUp'
 import ActionRecord from '@/Views/ActionRecord'
+import IPFS from "@/Views/IPFS"
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +29,11 @@ export default new Router({
       path: '/ActionRecord',
       name: 'ActionRecord',
       component: ActionRecord
+    },
+    {
+      path: '/IPFS',
+      name: 'IPFS',
+      component: IPFS
     }
   ]
 })
