@@ -11,8 +11,8 @@
           </div>
 
           <div class="md-toolbar-section-end">
-            <md-button class="md-icon-button">
-              <md-icon>more_vert</md-icon>
+            <md-button @click="getLocalData"   class="md-icon-button">
+              <md-icon>refresh</md-icon>
             </md-button>
           </div>
         </div>
@@ -25,46 +25,62 @@
       <md-app-drawer :md-active.sync="menuVisible">
         <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
         <md-list>
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">Inbox</span>
+          <md-list-item @click="current='Home'">
+            <md-icon>home</md-icon>
+            <span class="md-list-item-text">Home</span>
+          </md-list-item>
+          <md-list-item @click="current='All'">
+            <md-icon>folder</md-icon>
+            <span class="md-list-item-text">All</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
+          <md-list-item @click="current='Videos'">
+            <md-icon>video_library</md-icon>
+            <span class="md-list-item-text">Videos</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>delete</md-icon>
-            <span class="md-list-item-text">Trash</span>
+          <md-list-item @click="current='Images'">
+            <md-icon>collections</md-icon>
+            <span class="md-list-item-text">Images</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
+          <md-list-item @click="current='Other'">
+            <md-icon>attach_file</md-icon>
+            <span class="md-list-item-text">Other</span>
           </md-list-item>
         </md-list>
       </md-app-drawer>
 
       <md-app-content>
-        
+        <div v-show="current=='Home'">          
           <div>
-          <md-button class="md-raised md-primary" @click="uploadSelectFiles" :disabled="selectFiles.length<=0 || uploadProcess">Upload</md-button>
+            <md-button class="md-raised md-primary" @click="uploadSelectFiles" :disabled="selectFiles.length<=0 || uploadProcess">Upload</md-button>
           </div>
-        <div class="content-wrap">
-          <div class="item-wrap" v-for="item in selectFiles" :key="item.id">
-            <video @loadeddata="videoLoaded(item,$event)"  v-if="item.type=='video'" :src="item.objUrl"></video>
-            <img v-else-if="item.type=='img'" :src="item.objUrl" alt="">
-            <p v-else>{{item.name}}</p>
-            <md-icon v-if="!item.uploading && !uploadProcess" @click.native="deleteItem(item.id)" class="fa icon-delete">delete_forever</md-icon>
-            <md-progress-spinner  v-if="item.uploading" class="md-accent icon-loading" md-mode="indeterminate"></md-progress-spinner>
+          <div class="content-wrap">
+            <div class="item-wrap" v-for="item in selectFiles" :key="item.id">
+              <video @loadeddata="videoLoaded(item,$event)"  v-if="item.type=='video'" :src="item.objUrl"></video>
+              <img v-else-if="item.type=='img'" :src="item.objUrl" alt="">
+              <p v-else>{{item.name}}</p>
+              <md-icon v-if="!item.uploading && !uploadProcess" @click.native="deleteItem(item.id)" class="fa icon-delete">delete_forever</md-icon>
+              <md-progress-spinner  v-if="item.uploading" class="md-accent icon-loading" md-mode="indeterminate"></md-progress-spinner>
+            </div>
+            <div class="btn-add item-wrap" v-show="!uploadProcess">
+              <md-icon class="md-size-2x">add</md-icon>
+              <input type="file" @change="change" ref="file"  multiple />
+            </div> 
           </div>
-          <div class="btn-add item-wrap" v-show="!uploadProcess">
-            <md-icon class="md-size-2x">add</md-icon>
-            <input type="file" @change="change" ref="file"  multiple />
-          </div> 
-         </div>
+        </div>
+        <div v-show="current!='Home'">
+            <div class="content-wrap">
+              <div class="item-wrap" v-for="item in localData" :key="item.id">
+                <video @loadeddata="videoLoaded(item,$event)"  v-if="item.type=='video'" :src="'https://ipfs.io/ipfs/'+item.id"></video>
+                <img v-else-if="item.type=='img'" :src="'https://ipfs.io/ipfs/'+item.id" alt="">
+                <p v-else>{{item.name}}</p>
+                <md-icon v-if="!item.uploading && !uploadProcess" @click.native="deleteItem(item.id)" class="fa icon-delete">delete_forever</md-icon>
+                <md-progress-spinner  v-if="item.uploading" class="md-accent icon-loading" md-mode="indeterminate"></md-progress-spinner>
+              </div>
+            </div>
+        </div>
       </md-app-content>
       
     </md-app>
@@ -84,33 +100,32 @@ export default {
     return {
       menuVisible: false,
       selectFiles: [],
-      uploadProcess:false
+      uploadProcess: false,
+      current: "Home",
+      localData: []
     };
   },
-  mounted() {},
-  watch: {},
+  mounted() {
+    this.getLocalData();
+  },
+  watch: {
+    current() {
+      if (this.menuVisible) this.menuVisible = false;
+    }
+  },
   computed: {},
   methods: {
-    videoLoaded(item, event) {
-      // /clientWidth clientHeight
-      // console.log(item,event)
-      // event.target.width = 200
-      // event.target.height = 200
-    },
+    videoLoaded(item, event) {},
     getBuffer(file) {
-
       return new Promise((resolove, reject) => {
         let reader = new FileReader();
         reader.readAsArrayBuffer(file);
-
         reader.onerror = err => {
           reject(err);
         };
-
         reader.onabort = err => {
           reject(err);
         };
-
         reader.onloadend = () => {
           resolove(Buffer.from(reader.result));
         };
@@ -118,15 +133,20 @@ export default {
     },
     async change() {
       // debugger;
+
       for (let i = 0; i < this.$refs.file.files.length; i++) {
         let file = this.$refs.file.files[i];
         // debugger;
-        console.log(this.selectFiles.find(f => f.id == file.path));
+        // console.log(
+        //   this.selectFiles.find(
+        //     f => f.id == (file.path ? file.path : file.name)
+        //   )
+        // );
         if (!this.selectFiles.find(f => f.id == file.path)) {
           let item = {};
           item.uploading = false;
           item.source = file;
-          item.id = file.path;
+          item.id = file.path ? file.path : file.name;
           item.buffer = await this.getBuffer(file);
           item.name = item.source.name;
           item.objUrl = window.URL.createObjectURL(file);
@@ -138,7 +158,6 @@ export default {
           } else {
             item.type = "other";
           }
-
           this.selectFiles.push(item);
         }
       }
@@ -146,23 +165,52 @@ export default {
       this.$refs.file.value = "";
     },
     async uploadSelectFiles() {
-      // ipfs.add(buffer)
+      
       this.uploadProcess = true;
-      for (let index = 0; index < this.selectFiles.length; index++) {
-        const item = this.selectFiles[index];
+      while (this.selectFiles.length > 0) {
+        let item = this.selectFiles[0];
         item.uploading = true;
-        let result = await ipfs.add(item.buffer)
+        let result = await ipfs.add(item.buffer);
         item.uploading = false;
-        item.hash = result.hash
-        console.log(result)
+        item.hash = result[0].hash;
+        this.saveLocal(item);
+        this.selectFiles.shift();
       }
       this.uploadProcess = false;
-      // this.selectFiles.forEach(item=>{
-        
-      // })
+      // for (let index = 0; index < this.selectFiles.length; index++) {
+      //   const item = this.selectFiles[index];
+
+      //   console.log(result);
+      // }
     },
-    deleteItem(id){
-      this.selectFiles.splice(this.selectFiles.findIndex(item => (item.id = id)), 1);
+    deleteItem(id) {
+      this.selectFiles.splice(
+        this.selectFiles.findIndex(item => (item.id = id)),
+        1
+      );
+    },
+    saveLocal(item) {
+      let localData = localStorage.getItem("save");
+      if (!localData) localData = [];
+      else localData = JSON.parse(localData);
+
+      let findResult = localData.find(saveData => saveData.id == item.hash);
+      if (!findResult) {
+        localData.push({
+          id: item.hash,
+          type: item.type,
+          time: Date.now()
+        });
+      }
+
+      localStorage.setItem("save", JSON.stringify(localData));
+    },
+    getLocalData() {
+      let localData = localStorage.getItem("save");
+      if (!localData) localData = [];
+      else localData = JSON.parse(localData);
+
+      this.localData = localData;
     }
   }
 };
