@@ -204,6 +204,7 @@ export default {
       }
 
       localStorage.setItem("save", JSON.stringify(localData));
+      this.getLocalData();
     },
     getLocalData() {
       let localData = localStorage.getItem("save");
