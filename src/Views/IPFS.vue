@@ -73,11 +73,11 @@
         <div v-show="current!='Home'">
             <div class="content-wrap">
               <div class="item-wrap" v-for="item in localData" :key="item.id">
-                <video @loadeddata="videoLoaded(item,$event)"  v-if="item.type=='video'" :src="'https://ipfs.io/ipfs/'+item.id"></video>
+                <video controls preload="auto" @loadeddata="videoLoaded(item,$event)"  v-if="item.type=='video'" :src="'https://ipfs.io/ipfs/'+item.id"></video>
                 <img v-else-if="item.type=='img'" :src="'https://ipfs.io/ipfs/'+item.id" alt="">
                 <p v-else>{{item.name}}</p>
-                <md-icon v-if="!item.uploading && !uploadProcess" @click.native="deleteItem(item.id)" class="fa icon-delete">delete_forever</md-icon>
-                <md-progress-spinner  v-if="item.uploading" class="md-accent icon-loading" md-mode="indeterminate"></md-progress-spinner>
+                <!-- <md-icon v-if="!item.uploading && !uploadProcess" @click.native="deleteItem(item.id)" class="fa icon-delete">delete_forever</md-icon>
+                <md-progress-spinner  v-if="item.uploading" class="md-accent icon-loading" md-mode="indeterminate"></md-progress-spinner> -->
               </div>
             </div>
         </div>
